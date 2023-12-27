@@ -27,7 +27,7 @@ export async function POST(req: Request) {
     );
 
     if (!success) {
-      return new Response('You have reached your request limit for the day.', {
+      return new Response('Du har nådd grensen for i dag. Login for å fortsette.', {
         status: 429,
         headers: {
           'X-RateLimit-Limit': limit.toString(),
