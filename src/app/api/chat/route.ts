@@ -11,6 +11,8 @@ const openai = new OpenAI({
 // IMPORTANT! Set the runtime to edge
 export const runtime = 'edge';
 
+
+
 export async function POST(req: Request) {
   if (process.env.KV_REST_API_URL && process.env.KV_REST_API_TOKEN) {
     const ip = req.headers.get('x-forwarded-for');
@@ -36,8 +38,8 @@ export async function POST(req: Request) {
     }
   }
 
-  // Extract the `prompt` from the body of the request
-  const { messages } = await req.json();
+  let { messages } = await req.json();
+
 
   // Define a system message
   const systemMessage = {
