@@ -3,8 +3,6 @@
  * @see https://v0.dev/t/rVMdfhHGg7A
  */
 import Link from "next/link"
-import { TabsTrigger, TabsList, TabsContent, Tabs } from "@/components/ui/tabs"
-import { CardTitle, CardHeader, CardContent, Card } from "@/components/ui/card"
 
 
 export function Homepage() {
@@ -22,10 +20,9 @@ export function Homepage() {
           <Link className="text-sm font-medium hover:underline underline-offset-4" href="#">
             Blog  
           </Link>
-          <Link className="text-sm font-medium hover:underline underline-offset-4" href="#">
-            Kontakt
-          </Link>
-          <Link className="text-sm font-medium hover:underline underline-offset-4" href="#">
+          <Link className="text-sm font-medium hover:underline underline-offset-4" href="/sign-in">
+            Login         </Link>
+          <Link className="text-sm font-medium hover:underline underline-offset-4" href="/signin">
 
           </Link>
         </nav>
