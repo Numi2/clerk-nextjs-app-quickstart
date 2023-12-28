@@ -1,4 +1,3 @@
-// ./app/api/chat/route.ts
 import OpenAI from 'openai';
 import { OpenAIStream, StreamingTextResponse } from 'ai';
 import { kv } from '@vercel/kv';
@@ -13,13 +12,12 @@ const openai = new OpenAI({
 export const runtime = 'edge';
 
 export async function POST(req: Request) {
-  // eslint-disable-next-line turbo/no-undeclared-env-vars
   if (process.env.KV_REST_API_URL && process.env.KV_REST_API_TOKEN) {
     const ip = req.headers.get('x-forwarded-for');
     const ratelimit = new Ratelimit({
       redis: kv,
       // rate limit to 5 requests per 10 seconds
-      limiter: Ratelimit.slidingWindow(5, '10s'),
+      limiter: Ratelimit.slidingWindow(1, '10s'),
     });
 
     const { success, limit, reset, remaining } = await ratelimit.limit(
@@ -27,7 +25,7 @@ export async function POST(req: Request) {
     );
 
     if (!success) {
-      return new Response('You have reached your request limit for the day.', {
+      return new Response('Du har nådd grensen for i dag. Login for å fortsette.', {
         status: 429,
         headers: {
           'X-RateLimit-Limit': limit.toString(),
@@ -38,17 +36,23 @@ export async function POST(req: Request) {
     }
   }
 
-  // Extract the `prompt` from the body of the request
-  const { messages } = await req.json();
+  let { messages } = await req.json();
+
+
+  // Define a system message
+  const systemMessage = {
+    role: 'system',
+    content: 'You are eMedic; a medical knowledge assistant to medical profesionals and hospital staff. Answer user in Norwegian, or their own language. You ONLY answer medical questions. If someone asks you anything else, you should respond with "I am sorry, I can not answer that."',
+  };
+
+  // Add the system message to the beginning of the messages array
+  messages = [systemMessage, ...messages];
 
   // Ask OpenAI for a streaming chat completion given the prompt
   const response = await openai.chat.completions.create({
-    model: 'gpt-3.5-turbo',
+    model: 'gpt-4-1106-preview',
     stream: true,
-    messages: messages.map((message: any) => ({
-      content: message.content,
-      role: message.role,
-    })),
+    messages,
   });
 
   // Convert the response into a friendly text-stream
