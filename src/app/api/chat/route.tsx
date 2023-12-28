@@ -13,7 +13,7 @@ const openai = new OpenAI({
 export const runtime = 'edge';
 
 export async function POST(req: Request) {
-  // eslint-disable-next-line turbo/no-undeclared-env-vars
+
   if (process.env.KV_REST_API_URL && process.env.KV_REST_API_TOKEN) {
     const ip = req.headers.get('x-forwarded-for');
     const ratelimit = new Ratelimit({
