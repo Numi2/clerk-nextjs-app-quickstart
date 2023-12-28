@@ -10,7 +10,6 @@ export function Homepage() {
     <>
       <header className="px-4 lg:px-6 h-14 flex items-center">
         <Link className="flex items-center justify-center" href="#">
-         
           <span className="ml-2 text-lg font-semibold">eMedic</span>
         </Link>
         <nav className="ml-auto flex gap-4 sm:gap-6">
